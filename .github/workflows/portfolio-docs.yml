@@ -1,0 +1,8 @@
+name: portfolio-docs
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  docs:
+    uses: kristina58ai/kristina58ai/.github/workflows/docs-check.yml@main

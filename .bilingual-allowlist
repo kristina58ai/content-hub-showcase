@@ -1,0 +1,9 @@
+# Билингва обязательна только для корневого README.md (README.en.md есть).
+DECISIONS.md
+EXAMPLES.md
+HOOKS.md
+docs/**
+backend/**
+frontend/**
+.github/**
+CHANGELOG.md

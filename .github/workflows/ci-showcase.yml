@@ -1,0 +1,70 @@
+name: ci-showcase
+
+on:
+  push:
+    paths:
+      - "showcase/**"
+      - ".github/workflows/ci-showcase.yml"
+  pull_request:
+    paths:
+      - "showcase/**"
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: showcase/backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install
+        run: pip install -e ".[dev]"
+      - name: Lint (ruff)
+        run: ruff check .
+      - name: Type-check (mypy --strict)
+        run: mypy
+      - name: Tests (pytest, mock LLM/embeddings)
+        run: pytest
+        env:
+          LANGGRAPH_STRICT_MSGPACK: "true"
+          LLM_PRIMARY_PROVIDER: fake
+          EMBEDDING_PROVIDER: fake
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: showcase/frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: showcase/frontend/package-lock.json
+      - name: Install
+        run: npm ci
+      - name: Lint (eslint)
+        run: npm run lint
+      - name: Type-check (tsc)
+        run: npm run typecheck
+      - name: Tests (vitest)
+        run: npm run test
+
+  security-env-check:
+    # ADR-009: deploys are invalid unless LANGGRAPH_STRICT_MSGPACK=true is
+    # present in the production environment (repo variable mirrors HF Spaces env).
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify LANGGRAPH_STRICT_MSGPACK repo variable
+        env:
+          STRICT_MSGPACK: ${{ vars.LANGGRAPH_STRICT_MSGPACK }}
+        run: |
+          if [ "$STRICT_MSGPACK" != "true" ]; then
+            echo "::error::Repo variable LANGGRAPH_STRICT_MSGPACK must be 'true' (ADR-009 anti-RCE guard)."
+            exit 1
+          fi

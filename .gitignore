@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Node
+node_modules/
+.next/
+out/
+coverage/
+
+# Env & secrets
+.env
+.env.local
+.env*.local
+
+# Runtime data (rebuilt from sources)
+backend/data/chroma_demo/
+backend/data/showcase.db
+backend/data/chroma_session/
+backend/e2e_server.log
+*.tsbuildinfo
+
+# ML model cache
+.cache/
+models--*/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Playwright
+playwright-report/
+test-results/
+
+# Приватная шпаргалка к собесу (не публикуется)
+HOOKS.md
+HOOKS.en.md

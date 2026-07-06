@@ -1,0 +1,15 @@
+# Local development services for Content-hub Showcase.
+# Production uses Upstash Redis (REDIS_URL env); this compose file only
+# provides a local stand-in so the LangGraph checkpointer works offline.
+services:
+  redis:
+    # Redis 8+: the Query Engine (FT.* commands) ships in core — required by
+    # langgraph-checkpoint-redis (RedisVL indexes). redis:7 lacks it.
+    image: redis:8-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5

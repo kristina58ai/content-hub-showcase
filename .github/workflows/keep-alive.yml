@@ -1,0 +1,23 @@
+name: keep-alive
+
+# HF Spaces Free sleeps after 48h idle. Spec asks a ping every 36h; GitHub cron
+# cannot express "*/36" hours (hour field is 0-23), so we ping daily at 03:17 —
+# a stricter interval that still satisfies the <48h survival requirement.
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping backend /health
+        env:
+          BACKEND_HEALTH_URL: ${{ vars.BACKEND_HEALTH_URL }}
+        run: |
+          if [ -z "$BACKEND_HEALTH_URL" ]; then
+            echo "::warning::BACKEND_HEALTH_URL repo variable is not set; skipping ping."
+            exit 0
+          fi
+          curl --fail --silent --show-error --max-time 60 "$BACKEND_HEALTH_URL"

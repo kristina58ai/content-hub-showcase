@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+/* Design system «Мягкий рельеф» — light neumorphism (see design handoff STYLE.md). */
+:root {
+  /* Surfaces */
+  --bg: #e7eaef;
+  --inset-bg: #e3e7ed;
+  --raised-grad: linear-gradient(145deg, #f2f4f8, #e2e6ec);
+  --raised-grad-btn: linear-gradient(145deg, #f5f7fa, #e2e7ee);
+  --dark-grad: linear-gradient(145deg, #4c576b, #39424f);
+
+  /* Text */
+  --ink: #3a4354;
+  --ink-strong: #465062;
+  --ink-mid: #5b6575;
+  --text-secondary: #6b7688;
+  --text-muted: #8a94a6;
+  --text-faint: #9aa4b5;
+  --num-ghost: #aeb7c6;
+  --line: #b6bfcd;
+
+  /* Accents (the only two) */
+  --accent-info: #5b7fa6;
+  --accent-ok: #7da58a;
+  --accent-err: #b06a5e;
+
+  /* Shadows */
+  --sh-raised: 9px 9px 24px rgba(174, 184, 200, 0.55), -9px -9px 24px rgba(255, 255, 255, 0.95);
+  --sh-raised-sm: 4px 4px 12px rgba(174, 184, 200, 0.5), -4px -4px 12px rgba(255, 255, 255, 0.9);
+  --sh-raised-hover: 5px 5px 14px rgba(174, 184, 200, 0.55), -5px -5px 14px rgba(255, 255, 255, 0.95);
+  --sh-inset: inset 4px 4px 10px rgba(174, 184, 200, 0.5), inset -4px -4px 10px rgba(255, 255, 255, 0.9);
+  --sh-inset-sm: inset 2px 2px 6px rgba(174, 184, 200, 0.45), inset -2px -2px 6px rgba(255, 255, 255, 0.9);
+  --sh-inset-panel: inset 6px 6px 16px rgba(174, 184, 200, 0.5), inset -6px -6px 16px rgba(255, 255, 255, 0.9);
+
+  /* Radii */
+  --r-card: 24px;
+  --r-node: 20px;
+  --r-field: 16px;
+  --r-pill: 999px;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body), "Golos Text", sans-serif;
+}
+
+/* Content column: max 1280 / min 1160 (below → page scrolls horizontally). */
+.ch-container {
+  max-width: 1280px;
+  min-width: 1160px;
+  margin: 0 auto;
+  padding: 0 56px 72px;
+  box-sizing: border-box;
+}
+
+.font-display {
+  font-family: var(--font-display), Montserrat, sans-serif;
+}
+
+/* Raised (convex) surfaces */
+.ch-raised {
+  background: var(--raised-grad);
+  box-shadow: var(--sh-raised);
+}
+.ch-raised-sm {
+  background: var(--raised-grad-btn);
+  box-shadow: var(--sh-raised-sm);
+}
+/* Inset (pressed) surfaces */
+.ch-inset {
+  background: var(--inset-bg);
+  box-shadow: var(--sh-inset);
+}
+.ch-inset-sm {
+  background: var(--inset-bg);
+  box-shadow: var(--sh-inset-sm);
+}
+.ch-inset-panel {
+  background: var(--inset-bg);
+  box-shadow: var(--sh-inset-panel);
+}
+
+/* Hover = shadow shrinks («прожатие»); animate box-shadow only. */
+.ch-hover {
+  transition: box-shadow 0.2s ease;
+}
+.ch-hover:hover {
+  box-shadow: var(--sh-raised-hover);
+}
+.ch-hover:active {
+  box-shadow: var(--sh-inset-sm);
+}
+
+/* Dark accent pill (one per screen) */
+.ch-dark {
+  background: var(--dark-grad);
+  box-shadow: 4px 4px 12px rgba(174, 184, 200, 0.6);
+  color: #f2f4f8;
+}
+
+/* Fields: no focus ring — slightly deeper inset on focus. */
+.ch-field {
+  background: var(--inset-bg);
+  box-shadow: var(--sh-inset);
+  border: none;
+  outline: none;
+  color: var(--ink);
+}
+.ch-field:focus {
+  box-shadow: var(--sh-inset-panel);
+}
+.ch-field::placeholder {
+  color: var(--text-faint);
+}
+
+/* Number inputs: hide native spin buttons (clash with the soft-relief style) */
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Agent node pulse (running state) */
+@keyframes chPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.045);
+  }
+}
+.ch-pulse {
+  animation: chPulse 1.2s ease-in-out infinite;
+}

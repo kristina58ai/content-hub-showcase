@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+data/showcase.db
+data/chroma_demo/
+data/chroma_session/
+.env
+tests/
